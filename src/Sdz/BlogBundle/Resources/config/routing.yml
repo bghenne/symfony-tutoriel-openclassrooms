@@ -1,0 +1,35 @@
+# src/sdz/BlogBundle/Resources/config/routing.yml
+
+sdzblog_accueil:
+    path:      /{page}/{format}
+    defaults:  { _controller: SdzBlogBundle:Blog:index, page: 1, format: xml }
+    requirements:
+        page: \d*
+        format: xml|json
+
+sdzblog_voir:
+    path:      /article/{id}
+    defaults:  { _controller: SdzBlogBundle:Blog:voir }
+    requirements:
+        id: \d+
+
+sdzblog_ajouter:
+    path:      /ajouter
+    defaults:  { _controller: SdzBlogBundle:Blog:ajouter }
+
+sdzblog_modifier:
+    path:      /modifier/{id}
+    defaults:  { _controller: SdzBlogBundle:Blog:modifier }
+    requirements:
+        id: \d+
+sdzblog_supprimer:
+    path:      /supprimer/{id}
+    defaults:  { _controller: SdzBlogBundle:Blog:supprimer }
+    requirements:
+        id: \d+
+sdzblog_404:
+    path:     /error/404
+    defaults: { _controller: SdzBlogBundle:Blog:error404 }
+test:
+    path: /test
+    defaults: {_controller: SdzBlogBundle:Test:test}

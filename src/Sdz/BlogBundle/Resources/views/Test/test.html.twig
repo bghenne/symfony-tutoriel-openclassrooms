@@ -1,0 +1,17 @@
+{% extends "SdzBlogBundle::layout.html.twig" %}
+
+{% block body %}
+    {{ parent() }}
+    Afficher mes articles
+
+    {% if articles is not null %}
+        {% for article in articles %}
+            {% for competence in article.articleCompetence %}
+                <p>{{ competence.niveau }} - {{ article.titre }}</p>
+            {% endfor %}
+        {% endfor %}
+    {% else %}
+        Pas d'articles
+    {% endif %}
+
+{% endblock %}

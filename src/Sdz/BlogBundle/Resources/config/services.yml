@@ -1,0 +1,42 @@
+parameters:
+#    sdz_blog.example.class: Sdz\BlogBundle\Example
+
+services:
+    sdz_blog.antispam:
+        class: Sdz\BlogBundle\Antispam\SdzAntispam
+        arguments: [@mailer, 3]
+        tags:
+          - {name: twig.extension}
+        calls:
+          - [ setLocale, [%locale%] ]
+    sdz_blog.mailer_password:
+        class: Sdz\BlogBundle\Mailer\SdzPassword
+        arguments: [@mailer, %secret%]
+    sdz_blog.validator.antiflood:
+        class: Sdz\BlogBundle\Validator\AntifloodValidator   # La classe du service, ici notre validateur déjà créé
+        arguments: [@request, @doctrine.orm.entity_manager]  # Les données qu'on injecte au service : la requête et l'EntityManager
+        scope: request                                       # Comme on injecte la requête, on doit préciser ce scope
+        tags:
+            - { name: validator.constraint_validator, alias: sdzblog_antiflood }  # C'est avec l'alias qu'on retrouvera le service
+    sdz_blog.ckeditor:
+        class: Sdz\BlogBundle\Form\Type\CkeditorType
+        tags:
+            - { name: form.type, alias: ckeditor }
+    sdzblog.beta_listener:
+        class: Sdz\BlogBundle\Beta\BetaListener
+        arguments: ["2014-08-31"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse}
+    sdzblog.catchall_exception:
+        class: Sdz\BlogBundle\CatchAll\Exception
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onResponseException}
+    sdzblog_message_post:
+        class: Sdz\BlogBundle\Bigbrother\CensureListener
+        arguments: [[1, 2], @mailer]
+        tags:
+            - { name: kernel.event_listener, event: sdzblog.bigbrother.post_message, method: onMessagePost}
+    sdzblog_event_subscriber:
+        class: Sdz\BlogBundle\Event\Subscriber
+        tags:
+            - { name: kernel.event_subscriber}

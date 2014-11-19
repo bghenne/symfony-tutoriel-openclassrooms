@@ -1,0 +1,16 @@
+{# src/Sdz/BlogBundle/Resources/views/Blog/traduction.html.twig #}
+<html>
+    <body>
+    {{ 'Hello'|trans({'%name%' : name}) }}
+    {{ 'Nevermind'|trans }}
+    {{ 'site.name'|trans }}
+    {{ 'article.nombre'|transchoice(total_articles) }}
+
+    {% transchoice with {'%count%': total_articles} %}article.nombre{% endtranschoice %}
+
+    Aujourd'hui nous sommes le {{ 'now'|localizeddate('full', 'none') }} et il est {{ 'now'|localizeddate('none', 'short') }}
+
+    {% trans with {'%name%': name} from 'messages' %}Hello{% endtrans %}
+
+    </body>
+</html>
